@@ -19,7 +19,6 @@ const Home: React.FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [currentPage, setCurrentPage] = useState<number>(Number(page) || 1);
 	const [sortOption, setSortOption] = useState<string>('name'); // State for sorting option
-	const [filterOption, setFilterOption] = useState<string>('all'); // State for filtering option
 	const [selectedStudio, setSelectedStudio] = useState<string>('all'); // State for studio filter
 	const [selectedGameType, setSelectedGameType] = useState<string>('all'); // State for game type filter
 	const [selectedCurrency, setSelectedCurrency] = useState<string>('EUR'); // State for currency filter
@@ -46,10 +45,6 @@ const Home: React.FC = () => {
 		setSortOption(e.target.value);
 	};
 
-	const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setFilterOption(e.target.value);
-	};
-
 	const handleStudioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSelectedStudio(e.target.value);
 	};
@@ -73,7 +68,6 @@ const Home: React.FC = () => {
 
 	const filteredGames = filterGames(
 		sortedGames,
-		filterOption,
 		selectedStudio,
 		selectedGameType,
 		selectedCurrency,
@@ -89,13 +83,8 @@ const Home: React.FC = () => {
 		navigate(`/page/${pageNumber}`);
 	};
 
-	if (loading) {
-		return <div>Loading...</div>;
-	}
-
-	if (error) {
-		return <div>{error}</div>;
-	}
+	if (loading) return <div>Loading...</div>;
+	if (error) return <div>{error}</div>;
 
 	const studioNameMap = createStudioNameMap(studios);
 
@@ -104,14 +93,12 @@ const Home: React.FC = () => {
 			<h1>Games</h1>
 			<Filter
 				sortOption={sortOption}
-				filterOption={filterOption}
 				selectedStudio={selectedStudio}
 				selectedGameType={selectedGameType}
 				selectedCurrency={selectedCurrency}
 				studios={studios}
 				games={games}
 				handleSortChange={handleSortChange}
-				handleFilterChange={handleFilterChange}
 				handleStudioChange={handleStudioChange}
 				handleGameTypeChange={handleGameTypeChange}
 				handleCurrencyChange={handleCurrencyChange}

@@ -3,14 +3,12 @@ import { Game, Studio } from '../interface/interface';
 
 interface FilterProps {
 	sortOption: string;
-	filterOption: string;
 	selectedStudio: string;
 	selectedGameType: string;
 	selectedCurrency: string;
 	studios: Studio[];
 	games: Game[];
 	handleSortChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-	handleFilterChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 	handleStudioChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 	handleGameTypeChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 	handleCurrencyChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
