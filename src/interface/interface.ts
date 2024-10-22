@@ -36,18 +36,9 @@ export interface Studio {
 	blockedCountries: string;
 	lobbyOrder: number;
 	providerBlockedCountries: string;
+	blockedCurrencies: string;
 	icon: string;
 	popular: boolean;
-}
-
-export interface IIntegration {
-	integration: string;
-	currencies: ICurrencies[];
-	studioId: number;
-}
-
-interface ICurrencies {
-	[key: string]: string[];
 }
 
 export interface Tags {

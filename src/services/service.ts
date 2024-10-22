@@ -14,7 +14,6 @@ const fetchLobbyData = async (): Promise<LobbyData> => {
 	try {
 		const response = await axios.get<LobbyData>(BASE_URL);
 		cachedData = response.data;
-		console.log(response.data);
 		return cachedData;
 	} catch (error) {
 		console.error('Error fetching lobby data:', error);
@@ -54,7 +53,6 @@ export const getStudioById = async (
 	return studios.find((studio) => studio.id === id);
 };
 
-// get studios games from studio id
 export const getStudioGames = async (id: number): Promise<Game[]> => {
 	const games = await getGames();
 	return games.filter((game) => game.studioId === id);

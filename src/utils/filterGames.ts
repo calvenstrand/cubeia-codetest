@@ -16,8 +16,8 @@ export const filterGames = (
 	}
 
 	const studioBlockedCurrencies = studios.reduce((acc, studio) => {
-		acc[studio.id] = studio.blockedCountries
-			? studio.blockedCountries.split(',')
+		acc[studio.id] = studio.blockedCurrencies
+			? studio.blockedCurrencies.split(',')
 			: [];
 		return acc;
 	}, {} as { [key: number]: string[] });

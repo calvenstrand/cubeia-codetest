@@ -23,21 +23,26 @@ body {
 }
 
 a,
-.page-link {
+.pagination .page-link {
 	color: var(--secondary-color);
 	text-decoration: none;
 }
 
-.active > .page-link {
+.pagination .active > .page-link {
 	background-color: var(--accent-color);
 	border-color: var(--accent-color);
+	color: var(--secondary-color);
 }
 
-.page-link:hover {
+.pagination .page-link:hover {
 	background-color: var(--accent-color);
 	border-color: var(--accent-color);
 	color: var(--secondary-color);
 	transition: all 0.5s ease;
+}
+
+.pagination .page-link {
+	color: var(--accent-color);
 }
 
 .card {

@@ -4,6 +4,7 @@ import { getStudioById, getStudioGames } from '../services/service';
 import { Game, Studio } from '../interface/interface';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import GameCard from '../components/GameCard';
+import StatusMessage from '../components/StatusMessage';
 
 const fallbackImageUrl = '';
 
@@ -43,9 +44,9 @@ const StudioDetail: React.FC = () => {
 		fetchStudio();
 	}, [id]);
 
-	if (loading) return <div>Loading...</div>;
-	if (error) return <div>{error}</div>;
-	if (!studio) return <div>Studio not found</div>;
+	if (loading || error || !studio) {
+		return <StatusMessage loading={loading} error={error} notFound={!studio} />;
+	}
 
 	return (
 		<div className='container container--studio-detail'>
@@ -57,9 +58,6 @@ const StudioDetail: React.FC = () => {
 								src={studio.imageUrl}
 								alt='Studio background'
 								className='img-fluid w-100'
-								onError={(e) => {
-									e.currentTarget.src = fallbackImageUrl;
-								}}
 							/>
 						</div>
 					</div>

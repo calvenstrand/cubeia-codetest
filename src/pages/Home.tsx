@@ -8,6 +8,7 @@ import GameCard from '../components/GameCard';
 import { filterGames } from '../utils/filterGames';
 import { createStudioNameMap } from '../utils/utils';
 import { useAppContext } from '../AppContext';
+import { updateAvailableTags, updateAvailableStudios } from '../utils/utils';
 
 const Home: React.FC = () => {
 	const { page } = useParams<{ page: string }>();
@@ -27,9 +28,16 @@ const Home: React.FC = () => {
 	}, [studios, tags]);
 
 	useEffect(() => {
-		updateAvailableTags();
-		updateAvailableStudios();
-	}, [selectedStudio, selectedCurrency, selectedTags]);
+		updateAvailableTags(
+			games,
+			selectedStudio,
+			selectedCurrency,
+			studios,
+			tags,
+			setAvailableTags
+		);
+		updateAvailableStudios(games, selectedTags, studios, setAvailableStudios);
+	}, [selectedStudio, selectedCurrency, selectedTags, games, studios, tags]);
 
 	const handleStudioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSelectedStudio(e.target.value);
@@ -49,38 +57,6 @@ const Home: React.FC = () => {
 				setSelectedTags((prevTags) => [...prevTags, selectedTag]);
 			}
 		}
-	};
-
-	const updateAvailableTags = () => {
-		let filteredGames = filterGames(
-			games,
-			selectedStudio,
-			selectedCurrency,
-			[],
-			studios
-		);
-
-		const availableTagIds = new Set<number>();
-		filteredGames.forEach((game) => {
-			game.gameTags.forEach((tagId) => availableTagIds.add(tagId));
-		});
-
-		const newAvailableTags = tags.filter((tag) => availableTagIds.has(tag.id));
-		setAvailableTags(newAvailableTags);
-	};
-
-	const updateAvailableStudios = () => {
-		let filteredGames = filterGames(games, 'all', 'all', selectedTags, studios);
-		const availableStudioIds = new Set<number>();
-
-		filteredGames.forEach((game) => {
-			availableStudioIds.add(game.studioId);
-		});
-
-		const newAvailableStudios = studios.filter((studio) =>
-			availableStudioIds.has(studio.id)
-		);
-		setAvailableStudios(newAvailableStudios);
 	};
 
 	const filteredGames = filterGames(

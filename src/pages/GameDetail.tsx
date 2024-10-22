@@ -5,6 +5,7 @@ import { getGameById } from '../services/service';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { createStudioNameMap, getStudioName } from '../utils/utils';
 import { useAppContext } from '../AppContext';
+import StatusMessage from '../components/StatusMessage';
 
 const GameDetail: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
@@ -34,9 +35,9 @@ const GameDetail: React.FC = () => {
 
 	const studioNameMap = createStudioNameMap(studios);
 
-	if (loading) return <div>Loading...</div>;
-	if (error) return <div>{error}</div>;
-	if (!game) return <div>Game not found</div>;
+	if (loading || error || !game) {
+		return <StatusMessage loading={loading} error={error} notFound={!game} />;
+	}
 
 	return (
 		<div className='container container--game-detail'>
@@ -51,15 +52,6 @@ const GameDetail: React.FC = () => {
 							/>
 						</div>
 					)}
-					<div className='d-grid gap-2 mt-4'>
-						<a
-							href='https://www.cubeia.com/'
-							className='btn btn-primary btn-cta'
-							rel='noreferrer noopener'
-						>
-							Play Game
-						</a>
-					</div>
 				</div>
 				<div className='card mb-4 text-white bg-dark col-md-6'>
 					<div className='card-header'>
@@ -85,6 +77,16 @@ const GameDetail: React.FC = () => {
 								<strong>Studio ID:</strong>
 								{getStudioName(game.studioId, studioNameMap)}
 							</p>
+
+							<div className='d-grid gap-2 mt-4'>
+								<a
+									href='https://www.cubeia.com/'
+									className='btn btn-primary btn-cta'
+									rel='noreferrer noopener'
+								>
+									Play {game.name}
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>
