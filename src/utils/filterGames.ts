@@ -3,7 +3,6 @@ import { Game } from '../interface/interface';
 export const filterGames = (
 	games: Game[],
 	selectedStudio: string,
-	selectedGameType: string,
 	selectedCurrency: string,
 	studioBlockedCurrencies: { [key: number]: string[] }
 ): Game[] => {
@@ -12,12 +11,6 @@ export const filterGames = (
 	if (selectedStudio !== 'all') {
 		filteredGames = filteredGames.filter(
 			(game) => game.studioId === Number(selectedStudio)
-		);
-	}
-
-	if (selectedGameType !== 'all') {
-		filteredGames = filteredGames.filter(
-			(game) => game.gameType === selectedGameType
 		);
 	}
 

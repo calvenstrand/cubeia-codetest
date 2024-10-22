@@ -14,7 +14,7 @@ const fetchLobbyData = async (): Promise<LobbyData> => {
 	try {
 		const response = await axios.get<LobbyData>(BASE_URL);
 		cachedData = response.data;
-		console.log(response);
+		console.log(response.data);
 		return cachedData;
 	} catch (error) {
 		console.error('Error fetching lobby data:', error);

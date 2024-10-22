@@ -3,9 +3,12 @@ import { useParams } from 'react-router-dom';
 import { Game } from '../interface/interface';
 import { getGameById } from '../services/service';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { createStudioNameMap, getStudioName } from '../utils/utils';
+import { useAppContext } from '../AppContext';
 
 const GameDetail: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
+	const { studios } = useAppContext();
 	const [game, setGame] = useState<Game | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
@@ -29,46 +32,61 @@ const GameDetail: React.FC = () => {
 		fetchGame();
 	}, [id]);
 
+	const studioNameMap = createStudioNameMap(studios);
+
 	if (loading) return <div>Loading...</div>;
 	if (error) return <div>{error}</div>;
 	if (!game) return <div>Game not found</div>;
 
 	return (
-		<div className='container mt-4'>
-			{game.backgroundImageUrl && (
-				<div className='hero-image mb-4'>
-					<img
-						src={game.backgroundImageUrl}
-						alt='Game background'
-						className='img-fluid w-100'
-					/>
-				</div>
-			)}
+		<div className='container container--game-detail'>
 			<div className='row'>
-				<div className='col-md-8'>
-					<h1>{game.name}</h1>
-					<p>{game.description}</p>
+				<div className='col-md-6'>
+					{game.imageUrl && (
+						<div className='hero-image'>
+							<img
+								src={game.imageUrl}
+								alt='Game background'
+								className='img-fluid w-100'
+							/>
+						</div>
+					)}
+					<div className='d-grid gap-2 mt-4'>
+						<a
+							href='https://www.cubeia.com/'
+							className='btn btn-primary btn-cta'
+							rel='noreferrer noopener'
+						>
+							Play Game
+						</a>
+					</div>
 				</div>
-				<div className='col-md-4'>
-					<h5>Game Details</h5>
-					<ul className='list-group'>
-						<li className='list-group-item'>
-							<strong>Game Type:</strong> {game.gameType}
-						</li>
-						<li className='list-group-item'>
-							<strong>Aspect Ratio:</strong> {game.aspectRatio}
-						</li>
-						<li className='list-group-item'>
-							<strong>Integration:</strong> {game.integration}
-						</li>
-						<li className='list-group-item'>
-							<strong>Release Date:</strong>{' '}
-							{new Date(game.releaseDate).toLocaleDateString()}
-						</li>
-						<li className='list-group-item'>
-							<strong>Studio ID:</strong> {game.studioId}
-						</li>
-					</ul>
+				<div className='card mb-4 text-white bg-dark col-md-6'>
+					<div className='card-header'>
+						<h1>{game.name}</h1>
+					</div>
+					<div className='card-body'>
+						<div className='col-md-12'>
+							<p>{game.description}</p>
+							<p>
+								<strong>Game Type:</strong> {game.gameType}
+							</p>
+							<p>
+								<strong>Aspect Ratio:</strong> {game.aspectRatio}
+							</p>
+							<p>
+								<strong>Integration:</strong> {game.integration}
+							</p>
+							<p>
+								<strong>Release Date:</strong>{' '}
+								{new Date(game.releaseDate).toLocaleDateString()}
+							</p>
+							<p>
+								<strong>Studio ID:</strong>
+								{getStudioName(game.studioId, studioNameMap)}
+							</p>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

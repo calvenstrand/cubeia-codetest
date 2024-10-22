@@ -10,6 +10,8 @@ const Pagination: React.FC<PaginationProps> = ({
 	const totalPages = Math.ceil(totalItems / itemsPerPage);
 	const maxPageNumbersToShow = 5;
 
+	if (totalPages <= 1) return null;
+
 	const getPageNumbers = () => {
 		const pages = [];
 		const halfMaxPageNumbersToShow = Math.floor(maxPageNumbersToShow / 2);

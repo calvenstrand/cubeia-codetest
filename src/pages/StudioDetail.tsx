@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getStudioById } from '../services/service';
-import { Studio } from '../interface/interface';
+import { getStudioById, getStudioGames } from '../services/service';
+import { Game, Studio } from '../interface/interface';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import GameCard from '../components/GameCard';
 
 const fallbackImageUrl = '';
 
 const StudioDetail: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [studio, setStudio] = useState<Studio | null>(null);
+	const [studioGames, setStudioGames] = useState<Game[] | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
@@ -28,6 +30,16 @@ const StudioDetail: React.FC = () => {
 			}
 		};
 
+		const fetchStudioGames = async () => {
+			try {
+				const games = await getStudioGames(Number(id));
+				setStudioGames(games);
+			} catch (error) {
+				console.error('Error fetching studio games', error);
+			}
+		};
+
+		fetchStudioGames();
 		fetchStudio();
 	}, [id]);
 
@@ -36,7 +48,7 @@ const StudioDetail: React.FC = () => {
 	if (!studio) return <div>Studio not found</div>;
 
 	return (
-		<div className='container mt-4'>
+		<div className='container container--studio-detail'>
 			{studio.imageUrl && (
 				<div className='hero-image mb-4'>
 					<img
@@ -49,7 +61,7 @@ const StudioDetail: React.FC = () => {
 					/>
 				</div>
 			)}
-			<div className='card'>
+			<div className='card mb-4 text-white bg-dark '>
 				<div className='card-header'>
 					<h1>{studio.name}</h1>
 				</div>
@@ -87,6 +99,13 @@ const StudioDetail: React.FC = () => {
 					</div>
 				</div>
 			</div>
+			{studioGames && (
+				<div className='row'>
+					{studioGames.map((game) => (
+						<GameCard key={game.id} game={game} />
+					))}
+				</div>
+			)}
 		</div>
 	);
 };

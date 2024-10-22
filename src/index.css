@@ -1,3 +1,65 @@
+/* css variables */
+:root {
+	--primary-color: rgb(25, 26, 27);
+	--secondary-color: rgb(255, 255, 255);
+	--accent-color: rgb(235, 5, 140);
+	--accent-color-dark: rgb(235, 5, 140, 0.75);
+}
+
+body {
+	/* use css variables for background and color */
+	background-color: var(--primary-color);
+	color: var(--secondary-color);
+}
+
+.container--home,
+.container--studio-detail,
+.container--game-detail {
+	margin-top: 3rem;
+}
+
 .navbar-brand {
 	margin: 0 auto;
+}
+
+a,
+.page-link {
+	color: var(--accent-color);
+	text-decoration: none;
+}
+
+.active > .page-link {
+	background-color: var(--accent-color);
+	border-color: var(--accent-color);
+}
+
+.page-link:hover {
+	background-color: var(--accent-color);
+	border-color: var(--accent-color);
+	color: var(--secondary-color);
+	transition: all 0.5s ease;
+}
+
+.card {
+	border-color: var(--accent-color);
+}
+
+.card-header {
+	border: 0;
+}
+
+.card-header h1 {
+	border-bottom: 1px solid var(--accent-color);
+}
+
+.btn-cta {
+	background-color: var(--accent-color);
+	border-color: var(--accent-color);
+}
+
+.btn-cta:hover,
+.btn-cta:focus,
+.btn.btn-cta:active {
+	background-color: var(--accent-color-dark);
+	border-color: var(--accent-color-dark);
 }
