@@ -6,8 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import GameCard from '../components/GameCard';
 import StatusMessage from '../components/StatusMessage';
 
-const fallbackImageUrl = '';
-
 const StudioDetail: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [studio, setStudio] = useState<Studio | null>(null);

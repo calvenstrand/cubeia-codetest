@@ -13,7 +13,7 @@ const Pagination: React.FC<PaginationProps> = ({
 	if (totalPages <= 1) return null;
 
 	const getPageNumbers = () => {
-		const pages = [];
+		const pages: (number | string)[] = [];
 		const halfMaxPageNumbersToShow = Math.floor(maxPageNumbersToShow / 2);
 
 		let startPage = Math.max(currentPage - halfMaxPageNumbersToShow, 1);
