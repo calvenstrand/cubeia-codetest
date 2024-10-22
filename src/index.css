@@ -24,7 +24,7 @@ body {
 
 a,
 .page-link {
-	color: var(--accent-color);
+	color: var(--secondary-color);
 	text-decoration: none;
 }
 
@@ -42,6 +42,11 @@ a,
 
 .card {
 	border-color: var(--accent-color);
+	border: 0;
+}
+
+.card .card-img-top {
+	border-radius: 0;
 }
 
 .card-header {
@@ -50,6 +55,11 @@ a,
 
 .card-header h1 {
 	border-bottom: 1px solid var(--accent-color);
+}
+
+.game--card .card-body {
+	background-color: var(--accent-color);
+	color: var(--primary-color);
 }
 
 .btn-cta {

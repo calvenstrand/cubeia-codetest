@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Tags } from '../interface/interface';
+import { Tags, Studio } from '../interface/interface';
 import Pagination from '../components/Pagination';
 import Filter from '../components/Filter';
 import GameCard from '../components/GameCard';
 import { filterGames } from '../utils/filterGames';
-import { filterGamesByTags } from '../utils/filterGamesByTags';
 import { createStudioNameMap } from '../utils/utils';
 import { useAppContext } from '../AppContext';
 
@@ -18,7 +17,19 @@ const Home: React.FC = () => {
 	const [selectedStudio, setSelectedStudio] = useState<string>('all');
 	const [selectedCurrency, setSelectedCurrency] = useState<string>('EUR');
 	const [selectedTags, setSelectedTags] = useState<Tags[]>([]);
-	const itemsPerPage = 12;
+	const [availableTags, setAvailableTags] = useState<Tags[]>(tags);
+	const [availableStudios, setAvailableStudios] = useState<Studio[]>(studios);
+	const itemsPerPage = 20;
+
+	useEffect(() => {
+		setAvailableStudios(studios);
+		setAvailableTags(tags);
+	}, [studios, tags]);
+
+	useEffect(() => {
+		updateAvailableTags();
+		updateAvailableStudios();
+	}, [selectedStudio, selectedCurrency, selectedTags]);
 
 	const handleStudioChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSelectedStudio(e.target.value);
@@ -40,28 +51,49 @@ const Home: React.FC = () => {
 		}
 	};
 
-	const studioBlockedCurrencies = studios.reduce((acc, studio) => {
-		acc[studio.id] = studio.blockedCountries
-			? studio.blockedCountries.split(',')
-			: [];
-		return acc;
-	}, {} as { [key: number]: string[] });
+	const updateAvailableTags = () => {
+		let filteredGames = filterGames(
+			games,
+			selectedStudio,
+			selectedCurrency,
+			[],
+			studios
+		);
+
+		const availableTagIds = new Set<number>();
+		filteredGames.forEach((game) => {
+			game.gameTags.forEach((tagId) => availableTagIds.add(tagId));
+		});
+
+		const newAvailableTags = tags.filter((tag) => availableTagIds.has(tag.id));
+		setAvailableTags(newAvailableTags);
+	};
+
+	const updateAvailableStudios = () => {
+		let filteredGames = filterGames(games, 'all', 'all', selectedTags, studios);
+		const availableStudioIds = new Set<number>();
+
+		filteredGames.forEach((game) => {
+			availableStudioIds.add(game.studioId);
+		});
+
+		const newAvailableStudios = studios.filter((studio) =>
+			availableStudioIds.has(studio.id)
+		);
+		setAvailableStudios(newAvailableStudios);
+	};
 
 	const filteredGames = filterGames(
 		games,
 		selectedStudio,
 		selectedCurrency,
-		studioBlockedCurrencies
+		selectedTags,
+		studios
 	);
-
-	const filteredGamesByTags = filterGamesByTags(filteredGames, selectedTags);
 
 	const indexOfLastGame = currentPage * itemsPerPage;
 	const indexOfFirstGame = indexOfLastGame - itemsPerPage;
-	const currentGames = filteredGamesByTags.slice(
-		indexOfFirstGame,
-		indexOfLastGame
-	);
+	const currentGames = filteredGames.slice(indexOfFirstGame, indexOfLastGame);
 
 	const paginate = (pageNumber: number) => {
 		setCurrentPage(pageNumber);
@@ -76,8 +108,8 @@ const Home: React.FC = () => {
 			<Filter
 				selectedStudio={selectedStudio}
 				selectedCurrency={selectedCurrency}
-				studios={studios}
-				tags={tags}
+				studios={availableStudios}
+				tags={availableTags}
 				handleStudioChange={handleStudioChange}
 				handleCurrencyChange={handleCurrencyChange}
 				handleTagChange={handleTagChange}
@@ -89,7 +121,7 @@ const Home: React.FC = () => {
 			</div>
 			<Pagination
 				itemsPerPage={itemsPerPage}
-				totalItems={filteredGamesByTags.length}
+				totalItems={filteredGames.length}
 				paginate={paginate}
 				currentPage={currentPage}
 			/>

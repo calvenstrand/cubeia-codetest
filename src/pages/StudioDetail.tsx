@@ -49,58 +49,66 @@ const StudioDetail: React.FC = () => {
 
 	return (
 		<div className='container container--studio-detail'>
-			{studio.imageUrl && (
-				<div className='hero-image mb-4'>
-					<img
-						src={studio.imageUrl}
-						alt='Studio background'
-						className='img-fluid w-100'
-						onError={(e) => {
-							e.currentTarget.src = fallbackImageUrl;
-						}}
-					/>
-				</div>
-			)}
-			<div className='card mb-4 text-white bg-dark '>
-				<div className='card-header'>
-					<h1>{studio.name}</h1>
-				</div>
-				<div className='card-body'>
-					<div className='row'>
-						<div className='col-md-6'>
-							<p>
-								<strong>External ID:</strong> {studio.externalId}
-							</p>
-							<p>
-								<strong>Integration:</strong> {studio.integration}
-							</p>
-							<p>
-								<strong>Enabled:</strong> {studio.enabled ? 'Yes' : 'No'}
-							</p>
-							<p>
-								<strong>Lobby Order:</strong> {studio.lobbyOrder}
-							</p>
-							<p>
-								<strong>Popular:</strong> {studio.popular ? 'Yes' : 'No'}
-							</p>
+			<div className='row'>
+				{studio.imageUrl && (
+					<div className='col-md-6 mb-4'>
+						<div className='hero-image'>
+							<img
+								src={studio.imageUrl}
+								alt='Studio background'
+								className='img-fluid w-100'
+								onError={(e) => {
+									e.currentTarget.src = fallbackImageUrl;
+								}}
+							/>
 						</div>
-						<div className='col-md-6'>
-							<p>
-								<strong>Blocked Countries:</strong> {studio.blockedCountries}
-							</p>
-							<p>
-								<strong>Provider Blocked Countries:</strong>
-								{studio.providerBlockedCountries}
-							</p>
-							<p>
-								<strong>Icon:</strong> {studio.icon}
-							</p>
+					</div>
+				)}
+				<div className='col-md-6'>
+					<div className='card text-white bg-dark'>
+						<div className='card-header'>
+							<h1>{studio.name}</h1>
+						</div>
+						<div className='card-body'>
+							<div className='row'>
+								<div className='col-md-6'>
+									<p>
+										<strong>External ID:</strong> {studio.externalId}
+									</p>
+									<p>
+										<strong>Integration:</strong> {studio.integration}
+									</p>
+									<p>
+										<strong>Enabled:</strong> {studio.enabled ? 'Yes' : 'No'}
+									</p>
+									<p>
+										<strong>Lobby Order:</strong> {studio.lobbyOrder}
+									</p>
+									<p>
+										<strong>Popular:</strong> {studio.popular ? 'Yes' : 'No'}
+									</p>
+								</div>
+								<div className='col-md-6'>
+									<p>
+										<strong>Blocked Countries:</strong>{' '}
+										{studio.blockedCountries}
+									</p>
+									<p>
+										<strong>Provider Blocked Countries:</strong>
+										{studio.providerBlockedCountries}
+									</p>
+									<p>
+										<strong>Icon:</strong> {studio.icon}
+									</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			{studioGames && (
 				<div className='row'>
+					<h2 className='text-center mb-5 mt-5'>{studio.name} Games</h2>
 					{studioGames.map((game) => (
 						<GameCard key={game.id} game={game} />
 					))}
