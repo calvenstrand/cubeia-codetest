@@ -1,20 +1,28 @@
 import axios from 'axios';
 import { Game, LobbyData, Studio, Tags } from '../interface/interface';
+import { isValidLobbyData } from '../utils/validators';
 
 const BASE_URL =
 	'https://cubeia-code-tests.s3.eu-west-1.amazonaws.com/lobby.json';
-
 let cachedData: LobbyData | null = null;
+let cacheTimestamp: number | null = null;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 const fetchLobbyData = async (): Promise<LobbyData> => {
-	if (cachedData) {
+	const now = Date.now();
+	if (cachedData && cacheTimestamp && now - cacheTimestamp < CACHE_DURATION) {
 		return cachedData;
 	}
 
 	try {
 		const response = await axios.get<LobbyData>(BASE_URL);
-		cachedData = response.data;
-		return cachedData;
+		if (isValidLobbyData(response.data)) {
+			cachedData = response.data;
+			cacheTimestamp = now;
+			return cachedData;
+		} else {
+			throw new Error('Invalid data format');
+		}
 	} catch (error) {
 		console.error('Error fetching lobby data:', error);
 		throw new Error('Failed to fetch lobby data');
