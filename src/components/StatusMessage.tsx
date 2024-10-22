@@ -35,7 +35,7 @@ const StatusMessage: React.FC<StatusMessageProps> = ({
 		return (
 			<div className='container'>
 				<div className='alert alert-warning' role='alert'>
-					Game not found
+					Not found
 				</div>
 			</div>
 		);

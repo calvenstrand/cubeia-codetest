@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PaginationProps } from '../interface/interface';
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -12,7 +12,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
 	if (totalPages <= 1) return null;
 
-	const getPageNumbers = () => {
+	const pageNumbersToShow = useMemo(() => {
 		const pages: (number | string)[] = [];
 		const halfMaxPageNumbersToShow = Math.floor(maxPageNumbersToShow / 2);
 
@@ -44,9 +44,7 @@ const Pagination: React.FC<PaginationProps> = ({
 		}
 
 		return pages;
-	};
-
-	const pageNumbersToShow = getPageNumbers();
+	}, [currentPage, totalPages, maxPageNumbersToShow]);
 
 	return (
 		<nav>
